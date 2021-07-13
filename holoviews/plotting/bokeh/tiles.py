@@ -1,10 +1,7 @@
-from __future__ import absolute_import, division, unicode_literals
-
 import numpy as np
 
 from bokeh.models import WMTSTileSource, BBoxTileSource, QUADKEYTileSource
 
-from ...core import util
 from ...core.options import SkipRendering
 from ...element.tiles import _ATTRIBUTIONS
 from .element import ElementPlot
@@ -13,11 +10,10 @@ from .element import ElementPlot
 class TilePlot(ElementPlot):
 
     style_opts = ['alpha', 'render_parents', 'level', 'smoothing', 'min_zoom', 'max_zoom']
-
     selection_display = None
 
     def get_extents(self, element, ranges, range_type='combined'):
-        extents = super(TilePlot, self).get_extents(element, ranges, range_type)
+        extents = super().get_extents(element, ranges, range_type)
         if (not self.overlaid and all(e is None or not np.isfinite(e) for e in extents)
             and range_type in ('combined', 'data')):
             x0, x1 = (-20037508.342789244, 20037508.342789244)
@@ -27,7 +23,7 @@ class TilePlot(ElementPlot):
         return extents
 
     def get_data(self, element, ranges, style):
-        if not isinstance(element.data, util.basestring):
+        if not isinstance(element.data, str):
             SkipRendering("WMTS element data must be a URL string, "
                           "bokeh cannot render %r" % element.data)
         if element.data is None:
